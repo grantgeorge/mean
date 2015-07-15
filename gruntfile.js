@@ -203,7 +203,7 @@ module.exports = function (grunt) {
 		}
 	});
 
-	// Load NPM tasks 
+	// Load NPM tasks
 	require('load-grunt-tasks')(grunt);
 
 	// Making grunt default to force in order not to break the project.
@@ -242,4 +242,7 @@ module.exports = function (grunt) {
 
 	// Run the project in production mode
 	grunt.registerTask('prod', ['build', 'env:prod', 'copy:localConfig', 'concurrent:default']);
+
+	// Heroku deployment
+	grunt.registerTask('heroku:production', 'build');
 };
