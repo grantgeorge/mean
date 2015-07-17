@@ -1,1 +1,5 @@
 /app/tests
+
+modules/*/tests/client/**/*.js'
+modules/*/tests/server/**/*.js'
+modules/*/tests/e2e/**/*.js

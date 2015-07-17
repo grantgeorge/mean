@@ -15,7 +15,6 @@
   "scripts": {
     "start": "grunt",
     "test": "grunt test",
-    "preinstall": "echo here it comes!",
     "postinstall": "bower install --config.interactive=false && gulp build",
     "postinstall_durp": "./node_modules/protractor/bin/webdriver-manager update"
   },
