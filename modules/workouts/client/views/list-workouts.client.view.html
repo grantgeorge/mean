@@ -1,0 +1,20 @@
+<section data-ng-controller="WorkoutsController" data-ng-init="find()">
+  <div class="page-header">
+    <h1>Workouts</h1>
+  </div>
+  <div class="list-group">
+    <a data-ng-repeat="workout in workouts"  data-ui-sref="workouts.view({workoutId: workout._id})" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span data-ng-bind="workout.created | date:'mediumDate'"></span>
+        by
+        <span data-ng-bind="workout.user.displayName"></span>
+      </small>
+      <h4 class="list-group-item-heading" data-ng-bind="workout.name"></h4>
+      <p class="list-group-item-text" data-ng-bind="workout.description"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" data-ng-if="workouts.$resolved && !workouts.length">
+    No workouts yet, why don't you <a data-ui-sref="workouts.create">create one</a>?
+  </div>
+</section>

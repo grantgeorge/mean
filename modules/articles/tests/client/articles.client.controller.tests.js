@@ -50,6 +50,11 @@
 			});
 		}));
 
+		afterEach(function() {
+		  $httpBackend.verifyNoOutstandingExpectation();
+		  $httpBackend.verifyNoOutstandingRequest();
+		});
+
 		it('$scope.find() should create an array with at least one article object fetched from XHR', inject(function(Articles) {
 			// Create sample article using the Articles service
 			var sampleArticle = new Articles({
