@@ -47,7 +47,8 @@ describe('Workout CRUD tests', function () {
     user.save(function () {
       workout = {
         name: 'Workout Name',
-        description: 'Workout Description'
+        description: 'Workout Description',
+        exercises: []
       };
 
       done();
@@ -139,51 +140,127 @@ describe('Workout CRUD tests', function () {
       });
   });
 
-  it('should be able to update an workout if signed in', function (done) {
-    agent.post('/api/auth/signin')
-      .send(credentials)
-      .expect(200)
-      .end(function (signinErr, signinRes) {
-        // Handle signin error
-        if (signinErr) {
-          return done(signinErr);
-        }
+  describe('should be able to update able workout if signed in', function (done) {
 
-        // Get the userId
-        var userId = user.id;
+    var testSourceId;
 
-        // Save a new workout
-        agent.post('/api/workouts')
-          .send(workout)
-          .expect(200)
-          .end(function (workoutSaveErr, workoutSaveRes) {
-            // Handle workout save error
-            if (workoutSaveErr) {
-              return done(workoutSaveErr);
-            }
+    var exercise = {
+      name: 'Test Exercise',
+      description: 'Test Exercise',
+      repetitions: 10,
+      sets: 10
+    };
 
-            // Update workout name
-            workout.name = 'WHY YOU GOTTA BE SO MEAN?';
+    beforeEach(function (done) {
 
-            // Update an existing workout
-            agent.put('/api/workouts/' + workoutSaveRes.body._id)
-              .send(workout)
-              .expect(200)
-              .end(function (workoutUpdateErr, workoutUpdateRes) {
-                // Handle workout update error
-                if (workoutUpdateErr) {
-                  return done(workoutUpdateErr);
-                }
+      // sign in and create workout
+      agent.post('/api/auth/signin')
+        .send(credentials)
+        .expect(200)
+        .end(function (signinErr, signinRes) {
+          // Handle signin error
+          if (signinErr) {
+            return done(signinErr);
+          }
 
-                // Set assertions
-                (workoutUpdateRes.body._id).should.equal(workoutSaveRes.body._id);
-                (workoutUpdateRes.body.name).should.match('WHY YOU GOTTA BE SO MEAN?');
+          // Get the userId
+          var userId = user.id;
 
-                // Call the assertion callback
-                done();
-              });
-          });
-      });
+          // Save a new workout
+          agent.post('/api/workouts')
+            .send(workout)
+            .expect(200)
+            .end(function (workoutSaveErr, workoutSaveRes) {
+              // Handle workout save error
+              if (workoutSaveErr) {
+                return done(workoutSaveErr);
+              }
+              testSourceId = workoutSaveRes.body._id;
+              done();
+            });
+        });
+    });
+
+    it('should be able to update a workout if signed in', function (done) {
+      agent.post('/api/auth/signin')
+        .send(credentials)
+        .expect(200)
+        .end(function (signinErr, signinRes) {
+          // Handle signin error
+          if (signinErr) {
+            return done(signinErr);
+          }
+
+          // Update workout name
+          workout.name = 'WHY YOU GOTTA BE SO MEAN?';
+
+          // done();
+
+          // Update an existing workout
+          agent.put('/api/workouts/' + testSourceId)
+            .send(workout)
+            .expect(200)
+            .end(function (workoutUpdateErr, workoutUpdateRes) {
+              // Handle workout update error
+              if (workoutUpdateErr) {
+                return done(workoutUpdateErr);
+              }
+
+              // Set assertions
+              (workoutUpdateRes.body._id).should.equal(workoutUpdateRes.body._id);
+              (workoutUpdateRes.body.name).should.match('WHY YOU GOTTA BE SO MEAN?');
+
+              // Call the assertion callback
+              done();
+            });
+        });
+    });
+
+    it('should be able to associate existing exercies', function (done) {
+
+      // sign in and create exercises
+      agent.post('/api/auth/signin')
+        .send(credentials)
+        .expect(200)
+        .end(function (signinErr, signinRes) {
+          // Handle signin error
+          if (signinErr) {
+            return done(signinErr);
+          }
+
+          // Save a new workout
+          agent.post('/api/exercises')
+            .send(exercise)
+            .expect(200)
+            .end(function (exerciseSaveErr, exerciseSaveRes) {
+              // Handle exercise save error
+              if (exerciseSaveErr) {
+                return done(exerciseSaveErr);
+              }
+
+              workout.exercises.push(exerciseSaveRes.body._id);
+
+              agent.put('/api/workouts/' + testSourceId)
+                .send(workout)
+                .expect(200)
+                .end(function (workoutUpdateErr, workoutUpdateRes) {
+                  // Handle workout update error
+                  if (workoutUpdateErr) {
+                    return done(workoutUpdateErr);
+                  }
+
+                  // Set assertions
+                  (workoutUpdateRes.body.exercises.length).should.equal(1);
+
+                  // Call the assertion callback
+                  done();
+                });
+
+            });
+        });
+
+    });
+
   });
 
   it('should be able to get a list of workouts if not signed in', function (done) {

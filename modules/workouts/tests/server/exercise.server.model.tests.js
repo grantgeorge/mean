@@ -17,6 +17,7 @@ var user, exercise;
  * Unit tests
  */
 describe('Exercise Model Unit Tests:', function() {
+
   beforeEach(function(done) {
     user = new User({
       firstName: 'Full',

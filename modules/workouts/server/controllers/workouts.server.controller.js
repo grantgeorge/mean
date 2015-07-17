@@ -43,6 +43,7 @@ exports.update = function(req, res) {
 
   workout.name = req.body.name;
   workout.description = req.body.description;
+  workout.exercises = req.body.exercises;
 
   workout.save(function(err) {
     if (err) {
@@ -50,18 +51,6 @@ exports.update = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-
-      _.forEach(workout.exercises, function(id) {
-
-        Exercise.findOne({_id: id}).exec(function(err, exercise) {
-          console.log(exercise);
-          workout.exercises.push(exercise);
-          exercise.save(function (err, t) {
-            if (err) res.send(err, 500);
-          });
-        });
-      });
-
       res.json(workout);
     }
   });
@@ -88,15 +77,19 @@ exports.delete = function(req, res) {
  * List of Workouts
  */
 exports.list = function(req, res) {
-  Workout.find().sort('-created').populate('user', 'displayName').exec(function(err, workouts) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json(workouts);
-    }
-  });
+  Workout.find()
+    .sort('-created')
+    .populate('user', 'displayName')
+    .populate('exercises', '-updated -created -__v -workouts')
+    .exec(function(err, workouts) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.json(workouts);
+      }
+    });
 };
 
 /**
@@ -110,14 +103,17 @@ exports.workoutByID = function(req, res, next, id) {
     });
   }
 
-  Workout.findById(id).populate('user', 'displayName').exec(function(err, workout) {
-    if (err) return next(err);
-    if (!workout) {
-      return res.status(404).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-    req.workout = workout;
-    next();
-  });
+  Workout.findById(id)
+    .populate('user', 'displayName')
+    .populate('exercises', '-updated -created -__v -workouts')
+    .exec(function(err, workout) {
+      if (err) return next(err);
+      if (!workout) {
+        return res.status(404).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      req.workout = workout;
+      next();
+    });
 };

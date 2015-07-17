@@ -172,9 +172,24 @@ gulp.task('build', function(done) {
 	runSequence('env:dev' ,'lint', ['uglify', 'cssmin'], done);
 });
 
-// Run the project tests
+// Run all project tests
 gulp.task('test', function(done) {
 	runSequence('env:test', ['karma', 'mocha'], done);
+});
+
+// Run the project server tests
+gulp.task('test:server', function(done) {
+	runSequence('env:test', ['mocha'], done);
+});
+
+// Run the project client tests
+gulp.task('test:client', function(done) {
+	runSequence('env:test', ['karma'], done);
+});
+
+// Run the project e2e tests
+gulp.task('test:e2e', function(done) {
+	runSequence('env:test', ['protractor'], done);
 });
 
 // Run the project in development mode

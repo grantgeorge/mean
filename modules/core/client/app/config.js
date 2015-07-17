@@ -11,14 +11,6 @@ var ApplicationConfiguration = (function() {
 		'ui.utils',
 		'angularFileUpload'];
 
-	var applicationModuleVendorTestDependencies = ['ngResource',
-		'ngAnimate',
-		'ngMock',
-		'ui.router',
-		'ui.bootstrap',
-		'ui.utils',
-		'angularFileUpload'];
-
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
 		// Create angular module

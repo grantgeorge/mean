@@ -230,9 +230,10 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', ['env:dev', 'lint', 'ngAnnotate', 'uglify', 'cssmin']);
 
 	// Run the project tests
-	grunt.registerTask('test', ['env:test', 'copy:localConfig', 'mongoose', 'mochaTest', 'karma:unit']);
+	grunt.registerTask('test', ['env:test', 'copy:localConfig', 'mongoose', 'mochaTest', 'karma:unit', 'protractor']);
 	grunt.registerTask('test:server', ['env:test', 'mongoose', 'mochaTest']);
 	grunt.registerTask('test:client', ['env:test', 'mongoose', 'karma:unit']);
+	grunt.registerTask('test:e2e', ['env:test', 'mongoose', 'protractor']);
 
 	// Run the project in development mode
 	grunt.registerTask('default', ['env:dev', 'lint', 'copy:localConfig', 'concurrent:default']);

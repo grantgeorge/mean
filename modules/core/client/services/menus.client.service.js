@@ -10,7 +10,7 @@ angular.module('core').service('Menus', [
         // Define the menus object
         this.menus = {};
 
-        // A private function for rendering decision 
+        // A private function for rendering decision
         var shouldRender = function(user) {
             if (user) {
                 if (!!~this.roles.indexOf('*')) {
@@ -87,18 +87,34 @@ angular.module('core').service('Menus', [
             // Validate that the menu exists
             this.validateMenuExistance(menuId);
 
-            // Push new menu item
-            this.menus[menuId].items.push({
-                title: options.title || '',
-                state: options.state || '',
-                type: options.type || 'item',
-                class: options.class,
-                isPublic: ((options.isPublic === null || typeof options.isPublic === 'undefined') ? this.menus[menuId].isPublic : options.isPublic),
-                roles: ((options.roles === null || typeof options.roles === 'undefined') ? this.menus[menuId].roles : options.roles),
-                position: options.position || 0,
-                items: [],
-                shouldRender: shouldRender
-            });
+            if(options.position === 0) {
+                // Push new menu item
+                this.menus[menuId].items.unshift({
+                    title: options.title || '',
+                    state: options.state || '',
+                    type: options.type || 'item',
+                    class: options.class,
+                    isPublic: ((options.isPublic === null || typeof options.isPublic === 'undefined') ? this.menus[menuId].isPublic : options.isPublic),
+                    roles: ((options.roles === null || typeof options.roles === 'undefined') ? this.menus[menuId].roles : options.roles),
+                    position: options.position || 0,
+                    items: [],
+                    shouldRender: shouldRender
+                });
+            }
+            else {
+                // Push new menu item
+                this.menus[menuId].items.push({
+                    title: options.title || '',
+                    state: options.state || '',
+                    type: options.type || 'item',
+                    class: options.class,
+                    isPublic: ((options.isPublic === null || typeof options.isPublic === 'undefined') ? this.menus[menuId].isPublic : options.isPublic),
+                    roles: ((options.roles === null || typeof options.roles === 'undefined') ? this.menus[menuId].roles : options.roles),
+                    position: options.position || 0,
+                    items: [],
+                    shouldRender: shouldRender
+                });
+            }
 
             // Add submenu items
             if (options.items) {
@@ -107,8 +123,10 @@ angular.module('core').service('Menus', [
                 }
             }
 
-            // Return the menu object
+            console.log(this.menus);
+
             return this.menus[menuId];
+
         };
 
         // Add submenu item object

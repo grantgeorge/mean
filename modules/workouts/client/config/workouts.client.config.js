@@ -7,7 +7,8 @@ angular.module('workouts').run(['Menus',
     Menus.addMenuItem('topbar', {
       title: 'Workouts',
       state: 'workouts',
-      type: 'dropdown'
+      type: 'dropdown',
+      position: 0
     });
 
     // Add the dropdown list item

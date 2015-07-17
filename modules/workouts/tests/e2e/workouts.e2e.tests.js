@@ -2,9 +2,9 @@
 
 describe('Workouts E2E Tests:', function() {
   describe('Test workouts page', function() {
-    it('Should report missing credentials', function() {
+    it('Should display a list of workouts', function() {
       browser.get('http://localhost:3000/workouts');
-      expect(element.all(by.repeater('workout in workouts')).count()).toEqual(0);
+      expect(element.all(by.repeater('workout in workouts')).count()).toEqual(5);
     });
   });
 });

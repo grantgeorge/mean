@@ -41,7 +41,10 @@ var ExerciseSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
-  workouts: [{ type:Schema.ObjectId, ref: 'Workout' }]
+  workouts: [{
+    type: Schema.ObjectId,
+    ref: 'Workout'
+  }]
 });
 
 mongoose.model('Exercise', ExerciseSchema);
