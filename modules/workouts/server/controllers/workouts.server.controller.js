@@ -6,7 +6,9 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Workout = mongoose.model('Workout'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+  _ = require('lodash'),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  Exercise = mongoose.model('Exercise');
 
 /**
  * Create a workout
@@ -48,6 +50,18 @@ exports.update = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+
+      _.forEach(workout.exercises, function(id) {
+
+        Exercise.findOne({_id: id}).exec(function(err, exercise) {
+          console.log(exercise);
+          workout.exercises.push(exercise);
+          exercise.save(function (err, t) {
+            if (err) res.send(err, 500);
+          });
+        });
+      });
+
       res.json(workout);
     }
   });
