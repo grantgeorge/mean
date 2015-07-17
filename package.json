@@ -15,9 +15,10 @@
   "scripts": {
     "serve": "gulp",
     "test": "gulp test",
-    "build": "bower install --config.interactive=false && ./node_modules/protractor/bin/webdriver-manager update && gulp build",
+    "build": "bower install --config.interactive=false && gulp build",
     "postinstall": "npm run build",
-    "start": "./node_modules/.bin/forever -m 5 server.js"
+    "start": "./node_modules/.bin/forever -m 5 server.js",
+    "update": "./node_modules/protractor/bin/webdriver-manager update"
   },
   "dependencies": {
     "acl": "~0.4.4",
