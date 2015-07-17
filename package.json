@@ -13,11 +13,11 @@
     "npm": "2.12.1"
   },
   "scripts": {
-    "start": "./node_modules/.bin/forever -m 5 server.js",
     "serve": "gulp",
     "test": "gulp test",
-    "postinstall": "bower install --config.interactive=false && gulp build",
-    "postinstall_durp": "./node_modules/protractor/bin/webdriver-manager update"
+    "build": "bower install --config.interactive=false && ./node_modules/protractor/bin/webdriver-manager update && gulp build",
+    "postinstall": "npm run build",
+    "start": "./node_modules/.bin/forever -m 5 server.js"
   },
   "dependencies": {
     "acl": "~0.4.4",
@@ -58,7 +58,6 @@
     "gulp-csslint": "~0.1.5",
     "gulp-cssmin": "~0.1.7",
     "gulp-jshint": "^1.11.2",
-    "gulp-less": "^3.0.3",
     "gulp-load-plugins": "^1.0.0-rc.1",
     "gulp-ng-annotate": "^1.0.0",
     "gulp-nodemon": "^2.0.3",
